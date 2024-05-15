@@ -1,0 +1,62 @@
+functions:
+  - oas-verify-mocks
+
+extends: [[spectral:oas, off]]
+
+rules:
+  oas3-valid-media-example: true
+  oas3-valid-schema-example: true
+
+  microcks-examples-in-required-parameter:
+    description: Required param must have examples
+    message: "Required param must have examples"
+    formats:
+      - oas3
+    severity: warn
+    given: "$..parameters[?(@.required == true)]"
+    then:
+      field: examples
+      function: truthy
+
+  microcks-examples-in-optional-parameter:
+    description: Optional param should have examples
+    message: "Optional param should have examples"
+    formats:
+      - oas3
+    severity: info
+    given: "$..parameters[?(@.required != true)]"
+    then:
+      field: examples
+      function: truthy
+
+  microcks-examples-in-request-content:
+    description: Request with content must have examples
+    message: "Request with content must have examples"
+    formats:
+      - oas3
+    severity: warn
+    given: "$.paths..requestBody..content.*"
+    then:
+      field: examples
+      function: truthy
+
+  microcks-examples-in-response-content:
+    description: Response with content must have examples
+    message: "Response with content must have examples"
+    formats:
+      - oas3
+    severity: warn
+    given: "$.paths..responses..content.*"
+    then:
+      field: examples
+      function: truthy
+
+  microcks-examples-fragments-to-complete-mocks:
+    description: Response example must match required params examples to form full mocks
+    message: "{{error}}"
+    formats:
+      - oas3
+    severity: warn
+    given: "$.paths.*.*"
+    then:
+      function: oas-verify-mocks

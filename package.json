@@ -1,0 +1,28 @@
+{
+  "name": "@microcks/spectral-ruleset",
+  "version": "0.0.1",
+  "author": "Laurent Broudoux <laurent@microcks.io>",
+  "description": "A set of rules for Spectral that allows linting OpenAPI and AsyncAPI spec for Microcks conventions",
+  "bugs": {
+    "url": "https://github.com/microcks/microcks-spectral-ruleset/issues"
+  },
+  "homepage": "https://github.com/microcks/microcks-spectral-ruleset#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/microcks/microcks-spectral-ruleset.git"
+  },
+  "license": "Apache-2.0",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "files": [
+    "functions",
+    "*-rules.yaml"
+  ],
+  "engines": {
+    "node": ">= 16"
+  }
+}
