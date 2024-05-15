@@ -11,13 +11,35 @@ This ruleset is initially targeting the [Spectral](https://github.com/stoplighti
 
 ## Build Status
 
-Latest released version is `0.0.1`.
+Latest released version is `0.0.2`.
 
-Current development version is `0.0.2`.
+Current development version is `0.0.3`.
 
 ## How to use it?
 
-`TO BE COMPLETED AFTER 1ST RELEASE`
+Developers wanting to pull the ruleset can just install the package using `yarn` or `npm` and reference the module name in `extends`:
+
+```yaml
+extends:
+  - "@microks/spectral-ruleset"
+```
+
+Locking a ruleset on a given version is possible through `package.json`:
+
+```json
+{
+  "dependencies": {
+    "@microcks/spectral-rulese": "0.0.2"
+  }
+}
+```
+
+If you use Spectral in a browser or don't want to install the package, you can also reference that package through the use of CDNs for npm repositories, such as `unpkg.com`. You can then put directly in your own rules our `.spectral.yaml` file, the following directive:
+
+```yaml
+extends:
+  - "https://unpkg.com/@microcks/spectral-ruleset@0.0.2"
+```
 
 ## What results to expect?
 
@@ -34,7 +56,7 @@ Debugging evertyhing by hand can be tedious... So here's how to detect those iss
 
 ### Using Spectral
 
-We'll use the `microcks-rules.yaml` ruleset definition file here:
+We'll use the `microcks-rules.yaml` ruleset definition file here. If you followed the above instruction on how to use it via `unpkg`, you don't need to include the `-r microcks-rules.yaml` part of the command:
 
 ```shell
 $ spectral --version
