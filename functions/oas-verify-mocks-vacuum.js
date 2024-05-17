@@ -76,6 +76,19 @@ function runRule(operation) {
       console.warn('   It requires to have a matching response example or a x-microcks-ref to be considered as valid mock for Microcks.');
     }
   });
+  // Do reverse thing, check request body examples that may not be used in response.
+  requestsExamples.forEach(request => {
+    if (!responsesExamples.includes(request)) {
+
+      results.push({
+        message: `Request body example '${request}' is not used in any response`
+      })
+
+      console.warn('\n');
+      console.warn(`\u2139\ufe0f  Request body example '${request}' for '${operation.operationId}' is not used in any response.`)
+      console.warn('   It requires to have a matching response example or a x-microcks-ref to be considered as valid mock for Microcks.');
+    }
+  });
 
   return results;
 }
@@ -124,13 +137,13 @@ function collectParameterExampleNames(operation, type) {
 function collectRequestExampleNames(operation) {
   let requestBodiesExamples = [];
 
-  if (operation.requestBody) {
-    Object.keys(operation.requestBody).forEach(content => {
+  if (operation.requestBody && operation.requestBody.content) {
+    Object.keys(operation.requestBody.content).forEach(contentType => {
 
-      if (operation.requestBody[content].examples) {
-        let requestBodiesExamples = operation.requestBody[content].examples;
+      if (operation.requestBody.content[contentType].examples) {
+        let examples = operation.requestBody.content[contentType].examples;
 
-        Object.keys(requestBodiesExamples).forEach(example => {
+        Object.keys(examples).forEach(example => {
           requestBodiesExamples.push(example);
         });
       }
