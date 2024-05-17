@@ -48,9 +48,10 @@ To illustrate the results of applying the ruleset, let's have a look at the [Wea
 1. [L30](./resources/weather-forecast-openapi-bad.yamlL30): `unknown` is an expected response (see L96) but no value has been defined for this parameter. Microcks will not be able to associate response with parameter value, 
 2. [L45](./resources/weather-forecast-openapi-bad.yamlL45): `apiKey` parameter is required but no examples are provided. The mock will not be representative of expected API behavior,
 3. [L86](./resources/weather-forecast-openapi-bad.yamlL86): `temp` has been defined as a number in the schema but we provided a string. The mock will not be consistent with the API types definition,
-3. [L99](./resources/weather-forecast-openapi-bad.yamlL99): the `SetForecast` operation defines no examples for both the request and the response. Microcks will not be able to guess mock values for these one,
-4. [L124](./resources/weather-forecast-openapi-bad.yamlL124): the `DeleteForecast` operation defines an example for a region `center` and there's no response for this region. Microcks will not be able to find a suitable response,
-5. [L130](./resources/weather-forecast-openapi-bad.yamlL130): the `DeleteForecast` operation is a no-content response so it uses `x-microcks-ref` to tell to what response elements it should bind the response. However, the `center-south` value has not be defined as a valid parameter value... Microcks will not be able to bind to a matching request.
+3. [L106](./resources/weather-forecast-openapi-bad.yamlL99): the `SetForecast` operation request define an example called `north` but no response has this name. Microcks will not be able to associate response with body value, 
+4. [L116](./resources/weather-forecast-openapi-bad.yamlL116): the `SetForecast` operation defines no examples for both the response. Microcks will not be able to guess mock values for these one,
+5. [L124](./resources/weather-forecast-openapi-bad.yamlL124): the `DeleteForecast` operation defines an example for a region `center` and there's no response for this region. Microcks will not be able to find a suitable response,
+6. [L130](./resources/weather-forecast-openapi-bad.yamlL130): the `DeleteForecast` operation is a no-content response so it uses `x-microcks-ref` to tell to what response elements it should bind the response. However, the `center-south` value has not be defined as a valid parameter value... Microcks will not be able to bind to a matching request.
 
 Debugging evertyhing by hand can be tedious... So here's how to detect those issues and get some hints on what's going wrong.
 
@@ -64,8 +65,32 @@ $ spectral --version
 
 $ spectral lint -r microcks-rules.yaml resources/weather-forecast-openapi-bad.yaml
 
+/Users/laurent/Development/github/microcks-spectral-ruleset/resources/weather-forecast-openapi-bad.yaml
+  40:11  warning  microcks-examples-in-required-parameter        Required param must have examples                                                                                                                                                                          paths./forecast/{region}.get.parameters[1]
+  46:17  warning  microcks-examples-fragments-to-complete-mocks  🚨 Response example 'unknown' is incomplete, it has no matching input example.
+	 It requires at least one requestBody or parameter example with same name to be considered as valid mock for Microcks.     paths./forecast/{region}.get.responses
+  86:27    error  oas3-valid-media-example                       "temp" property type must be number                                                                                                                                                                        paths./forecast/{region}.get.responses[200].content.application/json.examples.south.value.temp
+ 112:17  warning  microcks-examples-fragments-to-complete-mocks  ℹ️  Request body example 'north' is not used in any response.
+	 It requires to have a matching response example or a x-microcks-ref to be considered as valid mock for Microcks.                           paths./forecast/{region}.put.responses
+ 116:30  warning  microcks-examples-in-response-content          Response with content must have examples                                                                                                                                                                   paths./forecast/{region}.put.responses[200].content.application/json
+ 133:17  warning  microcks-examples-fragments-to-complete-mocks  🔗 Response has x-microcks-ref 'center-south' but it doesn't match input example.
+	 It requires at least one requestBody or parameter example with same name to be considered as valid mock for Microcks.  paths./forecast/{region}.delete.responses
+ 133:17  warning  microcks-examples-fragments-to-complete-mocks  ℹ️  Path parameter example 'center' is not used in any response.
+	 It requires to have a matching response example or a x-microcks-ref to be considered as valid mock for Microcks.                        paths./forecast/{region}.delete.responses
+
+✖ 7 problems (1 error, 6 warnings, 0 infos, 0 hints)
+```
+
+If you'd like a more human-readable output of Microcks hints for a complete document, you can set the `MICROCKS_HINTS` environment variable to `true` when running spectral:
+
+```shell
+$ MICROCKS_HINTS=true spectral lint -r microcks-rules.yaml resources/weather-forecast-openapi-bad.yaml
+
 🚨 Response example 'unknown' for 'paths./forecast/{region}.get' is incomplete, it has no matching input example.
    It requires at least one requestBody or parameter example with same name to be considered as valid mock for Microcks.
+
+ℹ️  Request body example 'north' for 'paths./forecast/{region}.put' is not used in any response.
+   It requires to have a matching response example or a x-microcks-ref to be considered as valid mock for Microcks.
 
 🔗 Response has x-microcks-ref 'center-south' for 'paths./forecast/{region}.delete' but it doesn't match input example.
    It requires at least one requestBody or parameter example with same name to be considered as valid mock for Microcks.
@@ -74,15 +99,9 @@ $ spectral lint -r microcks-rules.yaml resources/weather-forecast-openapi-bad.ya
    It requires to have a matching response example or a x-microcks-ref to be considered as valid mock for Microcks.
 
 /Users/laurent/Development/github/microcks-spectral-ruleset/resources/weather-forecast-openapi-bad.yaml
-  40:11  warning  microcks-examples-in-required-parameter        Required param must have examples                                              paths./forecast/{region}.get.parameters[1]
-  46:17  warning  microcks-examples-fragments-to-complete-mocks  Response example 'unknown' is incomplete, it has no matching input example     paths./forecast/{region}.get.responses
-  86:27    error  oas3-valid-media-example                       "temp" property type must be number                                            paths./forecast/{region}.get.responses[200].content.application/json.examples.south.value.temp
- 102:28  warning  microcks-examples-in-request-content           Request with content must have examples                                        paths./forecast/{region}.put.requestBody.content.application/json
- 109:30  warning  microcks-examples-in-response-content          Response with content must have examples                                       paths./forecast/{region}.put.responses[200].content.application/json
- 126:17  warning  microcks-examples-fragments-to-complete-mocks  Response has x-microcks-ref 'center-south' but it doesn't match input example  paths./forecast/{region}.delete.responses
- 126:17  warning  microcks-examples-fragments-to-complete-mocks  Path parameter example 'center' is not used in any response                    paths./forecast/{region}.delete.responses
+  40:11  warning  microcks-examples-in-required-parameter        Required param must have examples                                                                                                                                                                          paths./forecast/{region}.get.parameters[1]
 
-✖ 7 problems (1 error, 6 warnings, 0 infos, 0 hints)
+[...]
 ```
 
 ### Using Vacuum
@@ -111,15 +130,18 @@ version: 0.9.16 | compiled: Thu, 09 May 2024 19:57:46 UTC
  INFO  Loaded 2 custom function(s) successfully.
  INFO  Linting file 'resources/weather-forecast-openapi-bad.yaml' against 5 rules: https://quobix.com/vacuum/rulesets/no-rules
 
-2024/05/15 13:59:33 
-2024/05/15 13:59:33 🚨 Response example 'unknown' for 'GetForecast' is incomplete, it has no matching input example.
-2024/05/15 13:59:33    It requires at least one requestBody or parameter example with same name to be considered as valid mock for Microcks.
-2024/05/15 13:59:33 
-2024/05/15 13:59:33 🔗 Response has x-microcks-ref 'center-south' for 'DeleteForecast' but it doesn't match input example.
-2024/05/15 13:59:33    It requires at least one requestBody or parameter example with same name to be considered as valid mock for Microcks.
-2024/05/15 13:59:33 
-2024/05/15 13:59:33 ℹ️  Path parameter example 'center' for 'DeleteForecast' is not used in any response.
-2024/05/15 13:59:33    It requires to have a matching response example or a x-microcks-ref to be considered as valid mock for Microcks.
+2024/05/17 14:16:48 
+2024/05/17 14:16:48 🚨 Response example 'unknown' for 'GetForecast' is incomplete, it has no matching input example.
+2024/05/17 14:16:48    It requires at least one requestBody or parameter example with same name to be considered as valid mock for Microcks.
+2024/05/17 14:16:48 
+2024/05/17 14:16:48 ℹ️ Request body example 'north' for 'SetForecast' is not used in any response.
+2024/05/17 14:16:48    It requires to have a matching response example or a x-microcks-ref to be considered as valid mock for Microcks.
+2024/05/17 14:16:48 
+2024/05/17 14:16:48 🔗 Response has x-microcks-ref 'center-south' for 'DeleteForecast' but it doesn't match input example.
+2024/05/17 14:16:48    It requires at least one requestBody or parameter example with same name to be considered as valid mock for Microcks.
+2024/05/17 14:16:48 
+2024/05/17 14:16:48 ℹ️ Path parameter example 'center' for 'DeleteForecast' is not used in any response.
+2024/05/17 14:16:48    It requires to have a matching response example or a x-microcks-ref to be considered as valid mock for Microcks.
 
 /Users/laurent/Development/github/microcks-spectral-ruleset/resources/weather-forecast-openapi-bad.yaml
 -------------------------------------------------------------------------------------------------------
@@ -127,10 +149,10 @@ Location                                           | Severity | Message         
 resources/weather-forecast-openapi-bad.yaml:17:7   | warning  | Response example 'unknown' is incomplete, it has no matching input example    | microcks-examples-fragments-to-complete-mocks | Validation | $.paths.*.*
 resources/weather-forecast-openapi-bad.yaml:40:11  | info     | Parameters should have examples                                               | microcks-examples-in-parameter                | Validation | $..parameters[0][1]
 resources/weather-forecast-openapi-bad.yaml:83:17  | warning  | expected number, but got string                                               | oas3-valid-schema-example                     | Examples   | $.paths['/forecast/{region}'].get.responses['200'].content['...
-resources/weather-forecast-openapi-bad.yaml:103:13 | warning  | Request with content must have examples                                       | microcks-examples-in-request-content          | Validation | $.paths..requestBody..content.*
-resources/weather-forecast-openapi-bad.yaml:110:15 | warning  | Response with content must have examples                                      | microcks-examples-in-response-content         | Validation | $.paths..responses..content.*
-resources/weather-forecast-openapi-bad.yaml:113:7  | warning  | Response has x-microcks-ref 'center-south' but it doesn't match input example | microcks-examples-fragments-to-complete-mocks | Validation | $.paths.*.*
-resources/weather-forecast-openapi-bad.yaml:113:7  | warning  | Path parameter example 'center' is not used in any response                   | microcks-examples-fragments-to-complete-mocks | Validation | $.paths.*.*
+resources/weather-forecast-openapi-bad.yaml:99:7   | warning  | Request body example 'north' is not used in any response                      | microcks-examples-fragments-to-complete-mocks | Validation | $.paths.*.*
+resources/weather-forecast-openapi-bad.yaml:117:15 | warning  | Response with content must have examples                                      | microcks-examples-in-response-content         | Validation | $.paths..responses..content.*
+resources/weather-forecast-openapi-bad.yaml:120:7  | warning  | Response has x-microcks-ref 'center-south' but it doesn't match input example | microcks-examples-fragments-to-complete-mocks | Validation | $.paths.*.*
+resources/weather-forecast-openapi-bad.yaml:120:7  | warning  | Path parameter example 'center' is not used in any response                   | microcks-examples-fragments-to-complete-mocks | Validation | $.paths.*.*
 
 Category   | Errors | Warnings | Info
 Validation | 0      | 5        | 1
@@ -138,7 +160,7 @@ Examples   | 0      | 1        | 0
 
                                                                      
           Linting passed, but with 6 warnings and 1 informs          
-                                                                     
+                                                                                                                                       
 ```
 
 ## Rules reference

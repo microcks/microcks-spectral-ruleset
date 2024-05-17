@@ -23,6 +23,8 @@ export default createRulesetFunction(
   function oasVerifyMocks(operation, options, context) {
     const results = [];
 
+    const hints = (process.env.MICROCKS_HINTS === 'true') || false;
+
     // Collection prerequisites elements.
     let requestsExamples = collectRequestExampleNames(operation);
     let pathParametersExamples = collectParameterExampleNames(operation, 'path');
@@ -38,12 +40,14 @@ export default createRulesetFunction(
           !queryParametersExamples.includes(example) && !headerParametersExamples.includes(example)) {
 
         results.push({
-          message: `Response example '${example}' is incomplete, it has no matching input example`,
+          message: `\ud83d\udea8 Response example '${example}' is incomplete, it has no matching input example.\n\t It requires at least one requestBody or parameter example with same name to be considered as valid mock for Microcks.`,
           path: [...context.path, 'responses']
         })
 
-        console.warn(`\n\ud83d\udea8 Response example '${example}' for '${context.path.join('.')}' is incomplete, it has no matching input example.`);
-        console.warn('   It requires at least one requestBody or parameter example with same name to be considered as valid mock for Microcks.');
+        if (hints) {
+          console.warn(`\n\ud83d\udea8 Response example '${example}' for '${context.path.join('.')}' is incomplete, it has no matching input example.`);
+          console.warn('   It requires at least one requestBody or parameter example with same name to be considered as valid mock for Microcks.');
+        }
       }
     });
 
@@ -58,12 +62,14 @@ export default createRulesetFunction(
                 !queryParametersExamples.includes(microcksRef) && !headerParametersExamples.includes(microcksRef)) {
             
               results.push({
-                message: `Response has x-microcks-ref '${microcksRef}' but it doesn't match input example`,
+                message: `\ud83d\udd17 Response has x-microcks-ref '${microcksRef}' but it doesn't match input example.\n\t It requires at least one requestBody or parameter example with same name to be considered as valid mock for Microcks.`,
                 path: [...context.path, 'responses']
               })
 
-              console.warn(`\n\ud83d\udd17 Response has x-microcks-ref '${microcksRef}' for '${context.path.join('.')}' but it doesn't match input example.`)
-              console.warn('   It requires at least one requestBody or parameter example with same name to be considered as valid mock for Microcks.');
+              if (hints) {
+                console.warn(`\n\ud83d\udd17 Response has x-microcks-ref '${microcksRef}' for '${context.path.join('.')}' but it doesn't match input example.`)
+                console.warn('   It requires at least one requestBody or parameter example with same name to be considered as valid mock for Microcks.');
+              }
             }
           })
         } 
@@ -75,12 +81,14 @@ export default createRulesetFunction(
       if (!responsesExamples.includes(param)) {
 
         results.push({
-          message: `Path parameter example '${param}' is not used in any response`,
+          message: `\u2139\ufe0f  Path parameter example '${param}' is not used in any response.\n\t It requires to have a matching response example or a x-microcks-ref to be considered as valid mock for Microcks.`,
           path: [...context.path, 'responses']
         })
 
-        console.warn(`\n\u2139\ufe0f  Path parameter example '${param}' for '${context.path.join('.')}' is not used in any response.`)
-        console.warn('   It requires to have a matching response example or a x-microcks-ref to be considered as valid mock for Microcks.');
+        if (hints) {
+          console.warn(`\n\u2139\ufe0f  Path parameter example '${param}' for '${context.path.join('.')}' is not used in any response.`)
+          console.warn('   It requires to have a matching response example or a x-microcks-ref to be considered as valid mock for Microcks.');
+        }
       }
     });
     // Do reverse thing, check request body examples that may not be used in response.
@@ -88,12 +96,14 @@ export default createRulesetFunction(
       if (!responsesExamples.includes(request)) {
 
         results.push({
-          message: `Request body example '${request}' is not used in any response`,
+          message: `\u2139\ufe0f  Request body example '${request}' is not used in any response.\n\t It requires to have a matching response example or a x-microcks-ref to be considered as valid mock for Microcks.`,
           path: [...context.path, 'responses']
         })
 
-        console.warn(`\n\u2139\ufe0f  Request body example '${request}' for '${context.path.join('.')}' is not used in any response.`)
-        console.warn('   It requires to have a matching response example or a x-microcks-ref to be considered as valid mock for Microcks.');
+        if (hints) {
+          console.warn(`\n\u2139\ufe0f  Request body example '${request}' for '${context.path.join('.')}' is not used in any response.`)
+          console.warn('   It requires to have a matching response example or a x-microcks-ref to be considered as valid mock for Microcks.');
+        }
       }
     });
 
