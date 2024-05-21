@@ -133,7 +133,7 @@ paths:
       responses:
         "204":
           description: Forecast is deleted
-          x-microcks-ref:
+          x-microcks-refs:
             - center-south
 
 tags:

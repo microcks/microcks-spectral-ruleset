@@ -40,22 +40,23 @@ function runRule(operation) {
     }
   });
 
-  // Now consider the responses that may have no content checking the x-microcks-ref.
+  let microcksRefs = [];
+  // Now consider the responses that may have no content checking the x-microcks-refs.
   if (operation.responses) {
     Object.keys(operation.responses).forEach(code => {
       
-      if (!operation.responses[code].content && operation.responses[code]['x-microcks-ref']) {
-        operation.responses[code]['x-microcks-ref'].forEach(microcksRef => {
-          
+      if (!operation.responses[code].content && operation.responses[code]['x-microcks-refs']) {
+        operation.responses[code]['x-microcks-refs'].forEach(microcksRef => {
+          microcksRefs.push(microcksRef);
           if (!requestsExamples.includes(microcksRef) && !pathParametersExamples.includes(microcksRef) && 
               !queryParametersExamples.includes(microcksRef) && !headerParametersExamples.includes(microcksRef)) {
           
             results.push({
-              message: `Response has x-microcks-ref '${microcksRef}' but it doesn't match input example`
+              message: `Response has x-microcks-refs '${microcksRef}' but it doesn't match input example`
             })
 
             console.warn('\n');
-            console.warn(`\ud83d\udd17 Response has x-microcks-ref '${microcksRef}' for '${operation.operationId}' but it doesn't match input example.`)
+            console.warn(`\ud83d\udd17 Response has x-microcks-refs '${microcksRef}' for '${operation.operationId}' but it doesn't match input example.`)
             console.warn('   It requires at least one requestBody or parameter example with same name to be considered as valid mock for Microcks.');
           }
         })
@@ -63,9 +64,9 @@ function runRule(operation) {
     });
   }
 
-  // Do reverse thing, check parameter examples that may not be used in response.
+  // Do reverse thing, check parameter examples that may not be used in response or x-microcks-refs.
   pathParametersExamples.forEach(param => {
-    if (!responsesExamples.includes(param)) {
+    if (!responsesExamples.includes(param) && !microcksRefs.includes(param)) {
 
       results.push({
         message: `Path parameter example '${param}' is not used in any response`
@@ -73,12 +74,12 @@ function runRule(operation) {
 
       console.warn('\n');
       console.warn(`\u2139\ufe0f  Path parameter example '${param}' for '${operation.operationId}' is not used in any response.`)
-      console.warn('   It requires to have a matching response example or a x-microcks-ref to be considered as valid mock for Microcks.');
+      console.warn('   It requires to have a matching response example or a x-microcks-refs to be considered as valid mock for Microcks.');
     }
   });
-  // Do reverse thing, check request body examples that may not be used in response.
+  // Do reverse thing, check request body examples that may not be used in response or x-microcks-refs.
   requestsExamples.forEach(request => {
-    if (!responsesExamples.includes(request)) {
+    if (!responsesExamples.includes(request) && !microcksRefs.includes(request)) {
 
       results.push({
         message: `Request body example '${request}' is not used in any response`
@@ -86,7 +87,7 @@ function runRule(operation) {
 
       console.warn('\n');
       console.warn(`\u2139\ufe0f  Request body example '${request}' for '${operation.operationId}' is not used in any response.`)
-      console.warn('   It requires to have a matching response example or a x-microcks-ref to be considered as valid mock for Microcks.');
+      console.warn('   It requires to have a matching response example or a x-microcks-refs to be considered as valid mock for Microcks.');
     }
   });
 
