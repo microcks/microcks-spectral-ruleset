@@ -16,13 +16,13 @@
 function runRule(operation) {
   const results = [];
 
-  // Collection prerequisites elements.
+  // Collect prerequisites elements.
   let requestsExamples = collectRequestExampleNames(operation);
   let pathParametersExamples = collectParameterExampleNames(operation, 'path');
   let queryParametersExamples = collectParameterExampleNames(operation, 'query');
   let headerParametersExamples = collectParameterExampleNames(operation, 'header');
 
-  //Now see if we can build complete responses.
+  // Now see if we can build complete responses.
   let responsesExamples = collectResponseExampleNames(operation);
 
   // Consider the responses with content.

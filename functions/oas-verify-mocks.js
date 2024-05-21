@@ -25,7 +25,7 @@ export default createRulesetFunction(
 
     const hints = (process.env.MICROCKS_HINTS === 'true') || false;
 
-    // Collection prerequisites elements.
+    // Collect prerequisites elements.
     let requestsExamples = collectRequestExampleNames(operation);
     let pathParametersExamples = collectParameterExampleNames(operation, 'path');
     let queryParametersExamples = collectParameterExampleNames(operation, 'query');
@@ -82,7 +82,7 @@ export default createRulesetFunction(
       if (!responsesExamples.includes(param) && !microcksRefs.includes(param)) {
 
         results.push({
-          message: `\u2139\ufe0f  Path parameter example '${param}' is not used in any response. It requires to have a matching response example or a x-microcks-ref to be considered as valid mock for Microcks.`,
+          message: `\u2139\ufe0f  Path parameter example '${param}' is not used in any response. It requires to have a matching response example or a x-microcks-refs to be considered as valid mock for Microcks.`,
           path: [...context.path, 'responses']
         })
 
@@ -97,7 +97,7 @@ export default createRulesetFunction(
       if (!responsesExamples.includes(request) && !microcksRefs.includes(request)) {
 
         results.push({
-          message: `\u2139\ufe0f  Request body example '${request}' is not used in any response. It requires to have a matching response example or a x-microcks-ref to be considered as valid mock for Microcks.`,
+          message: `\u2139\ufe0f  Request body example '${request}' is not used in any response. It requires to have a matching response example or a x-microcks-refs to be considered as valid mock for Microcks.`,
           path: [...context.path, 'responses']
         })
 
