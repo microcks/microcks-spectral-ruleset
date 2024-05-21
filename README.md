@@ -48,7 +48,7 @@ To illustrate the results of applying the ruleset, let's have a look at the [Wea
 1. [L30](./resources/weather-forecast-openapi-bad.yamlL30): `unknown` is an expected response (see L96) but no value has been defined for this parameter. Microcks will not be able to associate response with parameter value, 
 2. [L45](./resources/weather-forecast-openapi-bad.yamlL45): `apiKey` parameter is required but no examples are provided. The mock will not be representative of expected API behavior,
 3. [L86](./resources/weather-forecast-openapi-bad.yamlL86): `temp` has been defined as a number in the schema but we provided a string. The mock will not be consistent with the API types definition,
-3. [L106](./resources/weather-forecast-openapi-bad.yamlL99): the `SetForecast` operation request define an example called `north` but no response has this name. Microcks will not be able to associate response with body value, 
+3. [L106](./resources/weather-forecast-openapi-bad.yamlL106): the `SetForecast` operation request define an example called `north` but no response has this name. Microcks will not be able to associate response with body value, 
 4. [L116](./resources/weather-forecast-openapi-bad.yamlL116): the `SetForecast` operation defines no examples for both the response. Microcks will not be able to guess mock values for these one,
 5. [L124](./resources/weather-forecast-openapi-bad.yamlL124): the `DeleteForecast` operation defines an example for a region `center` and there's no response for this region. Microcks will not be able to find a suitable response,
 6. [L130](./resources/weather-forecast-openapi-bad.yamlL130): the `DeleteForecast` operation is a no-content response so it uses `x-microcks-ref` to tell to what response elements it should bind the response. However, the `center-south` value has not be defined as a valid parameter value... Microcks will not be able to bind to a matching request.
@@ -165,15 +165,17 @@ Examples   | 0      | 1        | 0
 
 ## Rules reference
 
-### Reused excternal rules
+### OpenAPI v3
+
+#### Reused external rules
 
 THe Microcks ruleset imports the `oas3-valid-media-example` and `oas3-valid-schema-example` rules from the [Spectral OpenAPI Rules](https://meta.stoplight.io/docs/spectral/4dec24461f3af-open-api-rules).
 
-These rules check that the `examples` definitions are conformant to the schema definition with the API specification. Having incorrect values or types will not prevent Microcks to produce mocks but these ones will be totally useless for people wanted to have a high-felidelitty simulation of the API.
+These rules check that the `examples` definitions are conformant to the schema definition with the API specification. Having incorrect values or types will not prevent Microcks to produce mocks but these ones will be totally useless for people wanted to have a high-fidelity simulation of the API.
 
 **Severity:** `error`
 
-### microcks-examples-in-required-parameter
+#### microcks-examples-in-required-parameter
 
 This rule will ask you to provide named `examples` for parameters marqued as required.
 
@@ -181,7 +183,7 @@ Putting named `examples` in parameters allows you to explicit values of paramete
 
 **Severity:** `warn`
 
-### microcks-examples-in-optional-parameter
+#### microcks-examples-in-optional-parameter
 
 This rule will recommend you to provide named `examples` for parameters marqued as optional.
 
@@ -189,7 +191,7 @@ Putting named `examples` in parameters allows you to explicit values of paramete
 
 **Severity:** `info`
 
-### microcks-examples-in-request-content
+#### microcks-examples-in-request-content
 
 This rule will ask you to provide named `examples` within `requestBody.content.*`.
 
@@ -197,7 +199,7 @@ Putting named `examples` in request content allows you to explicit payload depen
 
 **Severity:** `warn`
 
-### microcks-examples-in-response-content
+#### microcks-examples-in-response-content
 
 This rule will ask you to provide named `examples` within `responses.*.content.*`.
 
@@ -205,8 +207,40 @@ Putting named `examples` in response content allows you to explicit payload depe
 
 **Severity:** `warn`
 
-### microcks-examples-fragments-to-complete-mocks
+#### microcks-examples-fragments-to-complete-mocks
+
+This rule will check the coherence of different response, request and parameter examples to detect incomplete combination.
 
 **Severity:** `warn`
 
-This rule will check the coherence of different response, request and parameter examples to detect incomplete combination.
+### AsyncAPI v2.x
+
+#### Reused external rules
+
+THe Microcks ruleset imports the `asyncapi-message-examples` from the [Spectral AsyncAPI Rules](https://docs.stoplight.io/docs/spectral/1e63ffd0220f3-async-api-rules).
+
+This rule checks that the `examples` definitions are conformant to the schema definition with the API specification. Having incorrect values or types will not prevent Microcks to produce mocks but these ones will be totally useless for people wanted to have a high-fidelity simulation of the API.
+
+**Severity:** `error`
+
+#### microcks-examples-in-message
+
+This rule will ask you to provide named `examples` within `$.channels.*.[publish,subscribe].message`.
+
+Putting named `examples` in message allows you to explicit payload depending on different situation and then optionally to later bind them with corresponding parameter values. This provide a better overview of the expected behavior of your API for people who will discover it. Not providing these examples prevents Microcks from producing mocks.
+
+**Severity:** `warn`
+
+#### microcks-examples-in-parameter
+
+This rule will ask you to provide named `examples` within `$.channels.*.parameters.*.schema`.
+
+Putting named `examples` in channel parameters allows you to explicit values of parameters depending on different situation and then to later bind them with corresponding message content. This provide a better overview of the expected behavior of your API for people who will discover it. Not providing these examples prevents Microcks from producing correct and representative mocks.
+
+**Severity:** `warn`
+
+#### microcks-examples-fragments-to-complete-mocks
+
+This rule will check the coherence of different messages and parameter examples to detect incomplete combination.
+
+**Severity:** `warn`

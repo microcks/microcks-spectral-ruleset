@@ -1,7 +1,8 @@
 functions:
   - oas-verify-mocks
+  - aas-verify-mocks
 
-extends: [[spectral:oas, off]]
+extends: [[spectral:oas, off], [spectral:asyncapi, off]]
 
 rules:
   oas3-valid-media-example: true
@@ -60,3 +61,37 @@ rules:
     given: "$.paths.*.*"
     then:
       function: oas-verify-mocks
+
+  asyncapi-message-examples: true
+
+  microcks-examples-in-messages:
+    description: Message must have examples
+    message: "Message must have examples"
+    formats:
+      - aas2
+    severity: warn
+    given: "$.channels.*.[publish,subscribe].message"
+    then:
+      field: examples
+      function: truthy
+
+  microcks-examples-in-parameter:
+    description: Parameter must have examples
+    message: "Parameter must have examples"
+    formats:
+      - aas2
+    severity: warn
+    given: "$.channels.*.parameters.*.schema"
+    then:
+      field: examples
+      function: truthy
+
+  microcks-examples-fragments-to-complete-mocks:
+    description: Message example must match params examples to form full mocks
+    message: "{{error}}"
+    formats:
+      - aas2
+    severity: warn
+    given: "$.channels.*"
+    then:
+      function: aas-verify-mocks
