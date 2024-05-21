@@ -63,7 +63,7 @@ export default createRulesetFunction(
                 !queryParametersExamples.includes(microcksRef) && !headerParametersExamples.includes(microcksRef)) {
             
               results.push({
-                message: `\ud83d\udd17 Response has x-microcks-ref '${microcksRef}' but it doesn't match input example. It requires at least one requestBody or parameter example with same name to be considered as valid mock for Microcks.`,
+                message: `\ud83d\udd17 Response has x-microcks-refs '${microcksRef}' but it doesn't match input example. It requires at least one requestBody or parameter example with same name to be considered as valid mock for Microcks.`,
                 path: [...context.path, 'responses']
               })
 

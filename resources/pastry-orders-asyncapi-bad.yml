@@ -4,6 +4,12 @@ info:
   title: Pastry orders API
   version: 0.1.0
   description: Sample AsyncAPI for Pastry order events
+  x-microcks:
+    foo: bar
+    labels:
+      domain: weather-forecast
+      status: GA
+      team: Team A
 defaultContentType: application/json
 channels:
   pastry/orders:
@@ -36,6 +42,8 @@ channels:
       message:
         payload:
           type: string
+      x-microcks-operation:
+        frequency: '10'
 components:
   messages:
     PastryOrder:

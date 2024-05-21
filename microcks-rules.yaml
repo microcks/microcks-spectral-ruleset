@@ -5,6 +5,56 @@ functions:
 extends: [[spectral:oas, off], [spectral:asyncapi, off]]
 
 rules:
+  microcks-info-extension-valid:
+    description: x-microcks extension must be valid
+    message: "x-microcks extension must be valid"
+    formats:
+      - oas3
+      - aas2
+    severity: warn
+    given: "$.info.x-microcks"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          properties:
+            labels:
+              type: object
+              additionalProperties:
+                type: string
+          required:
+            - labels
+          additionalProperties: false
+
+  microcks-operation-extension-valid:
+    description: x-microcks-operation extension must be valid
+    message: "x-microcks-operation extension must be valid"
+    formats:
+      - oas3
+      - aas2
+    severity: warn
+    given: 
+      - "$.paths.*.*.x-microcks-operation"
+      - "$.channels.*.[publish,subscribe].x-microcks-operation"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          properties:
+            delay:
+              type: number
+              format: int32
+            frequency:
+              type: number
+              format: int32
+            dispatcher:
+              type: string
+            dispatcherRules:
+              type: string
+          additionalProperties: false
+
   oas3-valid-media-example: true
   oas3-valid-schema-example: true
 
@@ -61,10 +111,10 @@ rules:
     given: "$.paths.*.*"
     then:
       function: oas-verify-mocks
-
+          
   asyncapi-message-examples: true
 
-  microcks-examples-in-messages:
+  microcks-aas-examples-in-messages:
     description: Message must have examples
     message: "Message must have examples"
     formats:
@@ -75,7 +125,7 @@ rules:
       field: examples
       function: truthy
 
-  microcks-examples-in-parameter:
+  microcks-aas-examples-in-parameter:
     description: Parameter must have examples
     message: "Parameter must have examples"
     formats:
@@ -86,7 +136,7 @@ rules:
       field: examples
       function: truthy
 
-  microcks-examples-fragments-to-complete-mocks:
+  microcks-aas-examples-fragments-to-complete-mocks:
     description: Message example must match params examples to form full mocks
     message: "{{error}}"
     formats:

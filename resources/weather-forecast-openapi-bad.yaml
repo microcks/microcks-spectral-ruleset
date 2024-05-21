@@ -11,6 +11,13 @@ info:
   license:
     name: MIT License
     url: https://opensource.org/licenses/MIT
+  x-microcks:
+    labels:
+      domain: weather-forecast
+      status: GA
+      team: 
+        id: A
+        name: Team A
 paths:
   /forecast/{region}:
     get:
@@ -19,6 +26,8 @@ paths:
       description: Get forecast for region
       tags:
         - forecast
+      x-microcks-operation:
+        delay: short
       parameters:
         - name: region
           description: The region to get forecast for
