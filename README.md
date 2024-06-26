@@ -21,7 +21,7 @@ Developers wanting to pull the ruleset can just install the package using `yarn`
 
 ```yaml
 extends:
-  - "@microks/spectral-ruleset"
+  - "@microcks/spectral-ruleset"
 ```
 
 Locking a ruleset on a given version is possible through `package.json`:
