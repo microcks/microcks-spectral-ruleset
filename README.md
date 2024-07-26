@@ -11,9 +11,9 @@ This ruleset is initially targeting the [Spectral](https://github.com/stoplighti
 
 ## Build Status
 
-Latest released version is `0.0.4`.
+Latest released version is `0.0.5`.
 
-Current development version is `0.0.5`.
+Current development version is `0.0.6`.
 
 ## How to use it?
 
