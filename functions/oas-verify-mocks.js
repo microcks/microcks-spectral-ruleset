@@ -25,6 +25,9 @@ export default createRulesetFunction(
 
     const hints = (process.env.MICROCKS_HINTS === 'true') || false;
 
+    // Check if operation examples must have input.
+    let inputRequired = mustHaveInput(operation);
+
     // Collect prerequisites elements.
     let requestsExamples = collectRequestExampleNames(operation);
     let pathParametersExamples = collectParameterExampleNames(operation, 'path');
@@ -36,7 +39,7 @@ export default createRulesetFunction(
     
     // Consider the responses with content.
     responsesExamples.forEach(example => {
-      if (!requestsExamples.includes(example) && !pathParametersExamples.includes(example) && 
+      if (inputRequired && !requestsExamples.includes(example) && !pathParametersExamples.includes(example) && 
           !queryParametersExamples.includes(example) && !headerParametersExamples.includes(example)) {
 
         results.push({
@@ -111,6 +114,14 @@ export default createRulesetFunction(
     return results;
   },
 );
+
+/** Check if an operation must have request inputs in its examples. */
+function mustHaveInput(operation) {
+  if (operation.parameters && operation.parameters.length > 0) {
+    return true;
+  }
+  return false;
+}
 
 /** Extract all response examples names for operation. */
 function collectResponseExampleNames(operation) {
