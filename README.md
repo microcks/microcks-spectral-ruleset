@@ -16,6 +16,14 @@ Latest released version is `0.0.5`.
 
 Current development version is `0.0.6`.
 
+## Community
+
+* [Documentation](https://microcks.io/documentation/tutorials/getting-started/)
+* [Microcks Community](https://github.com/microcks/community) and community meeting
+* Join us on [Discord](https://microcks.io/discord-invite/), on [GitHub Discussions](https://github.com/orgs/microcks/discussions) or [CNCF Slack #microcks channel](https://cloud-native.slack.com/archives/C05BYHW1TNJ)
+
+To get involved with our community, please make sure you are familiar with the project's [Code of Conduct](./CODE_OF_CONDUCT.md).
+
 ## How to use it?
 
 Developers wanting to pull the ruleset can just install the package using `yarn` or `npm` and reference the module name in `extends`:
