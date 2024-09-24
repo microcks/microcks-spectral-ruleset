@@ -64,7 +64,7 @@ To illustrate the results of applying the ruleset, let's have a look at the [Wea
 7. [L18](./resources/weather-forecast-openapi-bad.yamlL18): `team` label used in `x-microcks` extension is not well-formed as it should just be a `string`, 
 8. [L30](./resources/weather-forecast-openapi-bad.yamlL30): `delay` information used in `x-microcks-operation` extension is not well-formed as it must be an `integer`. 
 
-Debugging evertyhing by hand can be tedious... So here's how to detect those issues and get some hints on what's going wrong.
+Debugging everything by hand can be tedious... So here's how to detect those issues and get some hints on what's going wrong. ✨
 
 ### Using Spectral
 
