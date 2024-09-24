@@ -9,6 +9,7 @@ This ruleset is initially targeting the [Spectral](https://github.com/stoplighti
 [![License](https://img.shields.io/github/license/microcks/microcks-testcontainers-java?style=for-the-badge&logo=apache)](https://www.apache.org/licenses/LICENSE-2.0)
 [![Project Chat](https://img.shields.io/badge/discord-microcks-pink.svg?color=7289da&style=for-the-badge&logo=discord)](https://microcks.io/discord-invite/)
 [![CNCF Landscape](https://img.shields.io/badge/CNCF%20Landscape-5699C6?style=for-the-badge&logo=cncf)](https://landscape.cncf.io/?item=app-definition-and-development--application-definition-image-build--microcks)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmicrocks%2Fmicrocks-spectral-ruleset.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmicrocks%2Fmicrocks-spectral-ruleset?ref=badge_shield)
 
 ## Build Status
 
@@ -275,3 +276,7 @@ Putting named `examples` in channel parameters allows you to explicit values of 
 This rule will check the coherence of different messages and parameter examples to detect incomplete combination.
 
 **Severity:** `warn`
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmicrocks%2Fmicrocks-spectral-ruleset.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmicrocks%2Fmicrocks-spectral-ruleset?ref=badge_large)
