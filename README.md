@@ -13,9 +13,9 @@ This ruleset is initially targeting the [Spectral](https://github.com/stoplighti
 
 ## Build Status
 
-Latest released version is `0.0.5`.
+Latest released version is `0.0.6`.
 
-Current development version is `0.0.6`.
+Current development version is `0.0.7-SNAPSHOT`.
 
 #### Fossa license and security scans
 
