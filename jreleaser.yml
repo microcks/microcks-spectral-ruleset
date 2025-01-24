@@ -1,0 +1,26 @@
+project:
+  name: Microcks Spectral Ruleset
+  description: Microcks Spectral Ruleset
+  longDescription: A set of rules for Spectral that allows linting OpenAPI and AsyncAPI spec for Microcks conventions
+  copyright: The Microcks Authors
+
+signing:
+  active: ALWAYS
+  armored: true
+
+files:
+  active: ALWAYS
+  artifacts:
+    - path: 'microcks-spectral-ruleset-{{projectVersion}}.spdx-sbom.json'
+    - path: 'microcks-spectral-ruleset-{{projectVersion}}.tgz'
+
+release:
+  github:
+    overwrite: true
+    releaseName: '{{tagName}}'
+    tagName: '{{projectVersion}}'
+    changelog:
+      formatted: ALWAYS
+      preset: conventional-commits
+      contributors:
+        format: '- {{contributorName}}{{#contributorUsernameAsLink}} ({{.}}){{/contributorUsernameAsLink}}'
