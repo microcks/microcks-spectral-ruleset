@@ -36,6 +36,13 @@ Current development version is `0.0.6`.
 
 To get involved with our community, please make sure you are familiar with the project's [Code of Conduct](./CODE_OF_CONDUCT.md).
 
+## Versions
+
+| This ruleset | Spectral Version | Vaccum Version |
+|--------------|------------------|----------------|
+| <= `0.0.5`   | `6.11.1` and +   | `0.9.16` and + |
+| >= `0.0.6`   | `6.14.0` and +   | `0.9.16` and + |
+
 ## How to use it?
 
 Developers wanting to pull the ruleset can just install the package using `yarn` or `npm` and reference the module name in `extends`:
