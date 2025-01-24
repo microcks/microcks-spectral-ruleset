@@ -1,6 +1,6 @@
 {
   "name": "@microcks/spectral-ruleset",
-  "version": "0.0.6",
+  "version": "0.0.7-SNAPSHOT",
   "author": "Laurent Broudoux <laurent@microcks.io>",
   "description": "A set of rules for Spectral that allows linting OpenAPI and AsyncAPI spec for Microcks conventions",
   "bugs": {
