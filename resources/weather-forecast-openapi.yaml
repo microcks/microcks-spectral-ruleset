@@ -23,6 +23,13 @@ paths:
       description: Get forecasts
       tags:
         - forecast
+      x-microcks-operation:
+        delay: 100
+        dispatcher: RANDOM
+        parameterConstraints:
+          - name: apiKey
+            in: header
+            required: true
       responses:
         "200":
           description: Weather forecasts for all regions

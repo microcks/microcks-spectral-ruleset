@@ -50,6 +50,25 @@ rules:
               type: string
             dispatcherRules:
               type: string
+            parameterConstraints:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                  in:
+                    type: string
+                    enum: [path, query, header]
+                  required:
+                    type: boolean
+                  recopy:
+                    type: boolean
+                  mustMatchRegexp:
+                    type: string
+                required:
+                  - name
+                  - in
           additionalProperties: false
 
   oas3-valid-media-example: true
