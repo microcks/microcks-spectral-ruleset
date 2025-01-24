@@ -57,7 +57,7 @@ Locking a ruleset on a given version is possible through `package.json`:
 ```json
 {
   "dependencies": {
-    "@microcks/spectral-ruleset": "0.0.5"
+    "@microcks/spectral-ruleset": "0.0.6"
   }
 }
 ```
@@ -66,7 +66,7 @@ If you use Spectral in a browser or don't want to install the package, you can a
 
 ```yaml
 extends:
-  - "https://unpkg.com/@microcks/spectral-ruleset@0.0.5"
+  - "https://unpkg.com/@microcks/spectral-ruleset@0.0.6"
 ```
 
 ## What results to expect?
