@@ -11,6 +11,7 @@ rules:
     formats:
       - oas3
       - aas2
+      - aas3
     severity: warn
     given: "$.info.x-microcks"
     then:
@@ -33,10 +34,12 @@ rules:
     formats:
       - oas3
       - aas2
+      - aas3
     severity: warn
     given: 
       - "$.paths.*.*.x-microcks-operation"
       - "$.channels.*.[publish,subscribe].x-microcks-operation"
+      - "$.operations.*.x-microcks-operation"
     then:
       function: schema
       functionOptions:
@@ -140,6 +143,17 @@ rules:
       - aas2
     severity: warn
     given: "$.channels.*.[publish,subscribe].message"
+    then:
+      field: examples
+      function: truthy
+
+  microcks-aas3-examples-in-messages:
+    description: Message must have examples
+    message: "Message must have examples"
+    formats:
+      - aas3
+    severity: warn
+    given: "$.components.messages.*"
     then:
       field: examples
       function: truthy
