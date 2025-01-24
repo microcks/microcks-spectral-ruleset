@@ -53,7 +53,6 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           npm sbom --sbom-format spdx > microcks-spectral-ruleset-${{ github.event.inputs.version }}.spdx-sbom.json 
-          npm run build
           npm publish --provenance
           npm pack
 
