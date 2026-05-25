@@ -1,0 +1,71 @@
+---
+openapi: 3.0.2
+info:
+  title: WeatherForecast API
+  version: 1.0.0
+  description: Regression fixture for parameter rules JSONPath null-safety.
+  license:
+    name: MIT License
+    url: https://opensource.org/licenses/MIT
+  x-microcks:
+    labels:
+      domain: weather-forecast
+      status: GA
+paths:
+  /forecast:
+    get:
+      operationId: GetForecasts
+      summary: Get forecasts
+      description: Get forecasts
+      tags:
+        - forecast
+      x-microcks-operation:
+        delay: 100
+        dispatcher: RANDOM
+      parameters:
+        - name: region
+          in: query
+          required: true
+          schema:
+            type: string
+          examples:
+            north:
+              value: north
+      responses:
+        "200":
+          description: Weather forecasts for the requested region
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Forecast'
+              examples:
+                north:
+                  value:
+                    region: north
+                    temp: -1.5
+                    weather: snowy
+                    visibility: 25
+                    note: null
+tags:
+  - name: forecast
+    description: Forecast related operation
+
+components:
+  schemas:
+    Forecast:
+      type: object
+      properties:
+        region:
+          type: string
+        temp:
+          format: double
+          type: number
+        weather:
+          type: string
+        visibility:
+          format: int32
+          type: integer
+        note:
+          type: string
+          nullable: true
+          example: null

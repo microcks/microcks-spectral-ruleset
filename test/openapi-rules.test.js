@@ -20,7 +20,21 @@ describe('OpenAPI v3', () => {
     const document = retrieveDocument('../../resources/weather-forecast-openapi.yaml')
 
     const results = await spectral.run(document)
-    
+
+    expect(results).toHaveLength(0)
+  })
+
+  // Regression: the parameter rules used recursive JSONPath filters without a
+  // null guard ($..parameters[?(@.required == true)]), which crashed Spectral
+  // with "Cannot read properties of null (reading 'required')" whenever the
+  // document contained a legitimate null somewhere (e.g. `example: null` on a
+  // nullable property). The fixture below has both.
+  test('Nullable example values do not crash parameter rules', async () => {
+    const spectral = await setupSpectral('microcks-rules.yaml')
+    const document = retrieveDocument('../../resources/weather-forecast-openapi-nullable.yaml')
+
+    const results = await spectral.run(document)
+
     expect(results).toHaveLength(0)
   })
 })

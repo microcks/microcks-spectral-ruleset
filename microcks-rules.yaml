@@ -86,7 +86,7 @@ rules:
     formats:
       - oas3
     severity: warn
-    given: "$..parameters[?(@.required == true)]"
+    given: "$..parameters[?(@ && @.required == true)]"
     then:
       field: examples
       function: truthy
@@ -97,7 +97,7 @@ rules:
     formats:
       - oas3
     severity: info
-    given: "$..parameters[?(@.required != true)]"
+    given: "$..parameters[?(@ && @.required != true)]"
     then:
       field: examples
       function: truthy
