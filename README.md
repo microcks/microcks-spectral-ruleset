@@ -13,9 +13,9 @@ This ruleset is initially targeting the [Spectral](https://github.com/stoplighti
 
 ## Build Status
 
-Latest released version is `0.0.6`.
+Latest released version is `0.0.7`.
 
-Current development version is `0.0.7-SNAPSHOT`.
+Current development version is `0.0.8-SNAPSHOT`.
 
 #### Fossa license and security scans
 
@@ -57,7 +57,7 @@ Locking a ruleset on a given version is possible through `package.json`:
 ```json
 {
   "dependencies": {
-    "@microcks/spectral-ruleset": "0.0.6"
+    "@microcks/spectral-ruleset": "0.0.7"
   }
 }
 ```
@@ -66,7 +66,7 @@ If you use Spectral in a browser or don't want to install the package, you can a
 
 ```yaml
 extends:
-  - "https://unpkg.com/@microcks/spectral-ruleset@0.0.6"
+  - "https://unpkg.com/@microcks/spectral-ruleset@0.0.7"
 ```
 
 ## What results to expect?
@@ -91,7 +91,7 @@ We'll use the `microcks-rules.yaml` ruleset definition file here. If you followe
 
 ```shell
 $ spectral --version
-6.11.1
+6.14.0
 
 $ spectral lint -r microcks-rules.yaml resources/weather-forecast-openapi-bad.yaml
 

@@ -11,6 +11,7 @@ on:
       nextVersion:
         description: 'Next version after release (-SNAPSHOT will be added automatically)'
         required: true
+
 jobs:
   release:
     name: Release
@@ -19,21 +20,25 @@ jobs:
       issues: write
       contents: write
       deployments: write
-      id-token: write
+      id-token: write   # Required for OIDC and NPM Trusted Publisher support
+
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v6
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
           ssh-key: ${{ secrets.RELEASE_DEPLOY_KEY }}
           fetch-depth: 0
           ref: ${{ github.event.inputs.branch }}
 
       - name: Set Node.js 18.x
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: 18.x
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
+
+      - name: Update npm to latest version  # Ensure npm 11.5.1 or later for trusted publishing
+        run: npm install -g npm@latest
 
       - name: Set release version
         run: |
@@ -68,7 +73,7 @@ jobs:
       # Persist logs
       - name: JReleaser release output
         if: always()
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v 7.0.1
         with:
           name: jreleaser-release
           path: |
